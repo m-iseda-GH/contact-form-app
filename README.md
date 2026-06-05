@@ -13,7 +13,7 @@ git clone git@github.com:m-iseda-GH/contact-form-app.git
 2. プロジェクトディレクトリへ移動する
 
 ```bash
-cd contact-form
+cd contact-form-app
 ```
 
 3. `.env.example` をコピーして `.env` を作成する
@@ -240,13 +240,9 @@ Seeder実行後、以下の管理者ユーザーでログインできます。
 
 ## ER図
 
-以下にER図を配置してください。
+ER図は以下に記載しています。
 
-```text
-docs/er-diagram.png
-```
-
-または、提出時に指定された形式に合わせてER図を添付してください。
+[ER図はこちら](docs/er-diagram.md)
 
 ---
 
