@@ -33,9 +33,10 @@ docker run --rm \
   composer install --ignore-platform-reqs
 ```
 
-5. Sailを起動する
+5. Sailのイメージを再構築して起動する
 
 ```bash
+./vendor/bin/sail build --no-cache --pull laravel.test
 ./vendor/bin/sail up -d
 ```
 
@@ -67,7 +68,7 @@ docker run --rm \
 
 ## 使用技術
 
-* PHP 8.2
+* PHP 8.5.12
 * Laravel 10
 * Laravel Sail
 * Laravel Fortify
@@ -158,13 +159,13 @@ Seeder実行後、以下の管理者ユーザーでログインできます。
 
 ## APIエンドポイント
 
-| メソッド   | URL                       | 内容         |
-| ------ | ------------------------- | ---------- |
-| GET    | `/api/contacts`           | お問い合わせ一覧取得 |
-| GET    | `/api/contacts/{contact}` | お問い合わせ詳細取得 |
-| POST   | `/api/contacts`           | お問い合わせ新規登録 |
-| PUT    | `/api/contacts/{contact}` | お問い合わせ更新   |
-| DELETE | `/api/contacts/{contact}` | お問い合わせ削除   |
+| メソッド | URL | 内容 |
+| --- | --- | --- |
+| GET | `/api/contacts` | お問い合わせ一覧取得 |
+| GET | `/api/contacts/{contact}` | お問い合わせ詳細取得 |
+| POST | `/api/contacts` | お問い合わせ新規登録 |
+| PUT | `/api/contacts/{contact}` | お問い合わせ更新 |
+| DELETE | `/api/contacts/{contact}` | お問い合わせ削除 |
 
 ---
 
@@ -172,69 +173,69 @@ Seeder実行後、以下の管理者ユーザーでログインできます。
 
 ### users テーブル
 
-| カラム名              | 型               | 制約               |
-| ----------------- | --------------- | ---------------- |
-| id                | bigint unsigned | primary key      |
-| name              | varchar(255)    | not null         |
-| email             | varchar(255)    | unique, not null |
-| email_verified_at | timestamp       | nullable         |
-| password          | varchar(255)    | not null         |
-| remember_token    | varchar(100)    | nullable         |
-| created_at        | timestamp       | nullable         |
-| updated_at        | timestamp       | nullable         |
+| カラム名 | 型 | 制約 |
+| --- | --- | --- |
+| id | bigint unsigned | primary key |
+| name | varchar(255) | not null |
+| email | varchar(255) | unique, not null |
+| email_verified_at | timestamp | nullable |
+| password | varchar(255) | not null |
+| remember_token | varchar(100) | nullable |
+| created_at | timestamp | nullable |
+| updated_at | timestamp | nullable |
 
 ---
 
 ### categories テーブル
 
-| カラム名       | 型               | 制約          |
-| ---------- | --------------- | ----------- |
-| id         | bigint unsigned | primary key |
-| content    | varchar(255)    | not null    |
-| created_at | timestamp       | nullable    |
-| updated_at | timestamp       | nullable    |
+| カラム名 | 型 | 制約 |
+| --- | --- | --- |
+| id | bigint unsigned | primary key |
+| content | varchar(255) | not null |
+| created_at | timestamp | nullable |
+| updated_at | timestamp | nullable |
 
 ---
 
 ### contacts テーブル
 
-| カラム名        | 型               | 制約          |
-| ----------- | --------------- | ----------- |
-| id          | bigint unsigned | primary key |
+| カラム名 | 型 | 制約 |
+| --- | --- | --- |
+| id | bigint unsigned | primary key |
 | category_id | bigint unsigned | foreign key |
-| first_name  | varchar(255)    | not null    |
-| last_name   | varchar(255)    | not null    |
-| gender      | tinyint         | not null    |
-| email       | varchar(255)    | not null    |
-| tel         | varchar(255)    | not null    |
-| address     | varchar(255)    | not null    |
-| building    | varchar(255)    | nullable    |
-| detail      | text            | not null    |
-| created_at  | timestamp       | nullable    |
-| updated_at  | timestamp       | nullable    |
+| first_name | varchar(255) | not null |
+| last_name | varchar(255) | not null |
+| gender | tinyint | not null |
+| email | varchar(255) | not null |
+| tel | varchar(255) | not null |
+| address | varchar(255) | not null |
+| building | varchar(255) | nullable |
+| detail | text | not null |
+| created_at | timestamp | nullable |
+| updated_at | timestamp | nullable |
 
 ---
 
 ### tags テーブル
 
-| カラム名       | 型               | 制約               |
-| ---------- | --------------- | ---------------- |
-| id         | bigint unsigned | primary key      |
-| name       | varchar(255)    | unique, not null |
-| created_at | timestamp       | nullable         |
-| updated_at | timestamp       | nullable         |
+| カラム名 | 型 | 制約 |
+| --- | --- | --- |
+| id | bigint unsigned | primary key |
+| name | varchar(255) | unique, not null |
+| created_at | timestamp | nullable |
+| updated_at | timestamp | nullable |
 
 ---
 
 ### contact_tag テーブル
 
-| カラム名       | 型               | 制約          |
-| ---------- | --------------- | ----------- |
-| id         | bigint unsigned | primary key |
+| カラム名 | 型 | 制約 |
+| --- | --- | --- |
+| id | bigint unsigned | primary key |
 | contact_id | bigint unsigned | foreign key |
-| tag_id     | bigint unsigned | foreign key |
-| created_at | timestamp       | nullable    |
-| updated_at | timestamp       | nullable    |
+| tag_id | bigint unsigned | foreign key |
+| created_at | timestamp | nullable |
+| updated_at | timestamp | nullable |
 
 ---
 
@@ -264,3 +265,16 @@ CSVエクスポートでは、検索条件を保持した状態で出力でき�
 また、日本語の文字化け対策としてBOM付きUTF-8で出力しています。
 
 作成日時は `Asia/Tokyo` に設定しています。
+
+---
+
+## セキュリティ対応履歴
+
+### 2026年10月24日：PHPの脆弱性対策
+
+PHPの脆弱性対策として、SailのPHP 8.5系イメージを再構築し、PHP 8.5.12の実行を確認しました。
+
+#### 対応内容
+
+- `./vendor/bin/sail build --no-cache --pull laravel.test`でPHPのDockerイメージを再構築
+- `docker run --rm --pull=never --entrypoint php sail-8.5/app -v`で`PHP 8.5.12`を確認
